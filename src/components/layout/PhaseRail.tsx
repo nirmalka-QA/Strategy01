@@ -1,11 +1,27 @@
 import React, { useState } from 'react';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { updatePhaseStatus } from '../../features/phase';
+import type { PhaseStatus } from '../../features/phase';
 import { PhaseStatusModal } from './PhaseStatusModal';
 
+const NEXT_STATUS: Record<PhaseStatus, PhaseStatus | null> = {
+  'Not Started': 'In Progress',
+  'In Progress': 'Complete',
+  Complete: null,
+};
+
 export const PhaseRail: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { id, name, status } = useAppSelector((s) => s.phase.currentPhase);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const targetStatus = NEXT_STATUS[status];
+
   const handleConfirm = () => {
-    // Phase State API call would be dispatched here
+    if (targetStatus) {
+      dispatch(updatePhaseStatus(targetStatus));
+    }
     setModalOpen(false);
   };
 
@@ -33,43 +49,47 @@ export const PhaseRail: React.FC = () => {
               fontSize: '14px',
             }}
           >
-            Current: Discovery
+            {name} — {status}
           </span>
         </div>
         <div>
-          <button
-            style={{
-              background: 'var(--cl-primary)',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: 'var(--cl-radius-lg)',
-              cursor: 'pointer',
-              fontWeight: 500,
-              fontSize: '14px',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'var(--cl-primary-hover)';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'var(--cl-primary)';
-            }}
-            onClick={() => setModalOpen(true)}
-          >
-            Complete Phase
-          </button>
+          {targetStatus && (
+            <button
+              style={{
+                background: 'var(--cl-primary)',
+                color: 'white',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: 'var(--cl-radius-lg)',
+                cursor: 'pointer',
+                fontWeight: 500,
+                fontSize: '14px',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = 'var(--cl-primary-hover)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = 'var(--cl-primary)';
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              {status === 'Not Started' ? 'Start Phase' : 'Complete Phase'}
+            </button>
+          )}
         </div>
       </header>
 
-      <PhaseStatusModal
-        opened={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={handleConfirm}
-        phaseId="PHASE-001"
-        phaseName="Discovery Phase"
-        currentStatus="In Progress"
-        targetStatus="Complete"
-      />
+      {targetStatus && (
+        <PhaseStatusModal
+          opened={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onConfirm={handleConfirm}
+          phaseId={id}
+          phaseName={name}
+          currentStatus={status}
+          targetStatus={targetStatus}
+        />
+      )}
     </>
   );
 };
