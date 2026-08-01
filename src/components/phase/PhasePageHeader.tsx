@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Group, Text, Badge, Button, Stack } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { updatePhaseStatus, useUpdatePhaseStatusMutation } from '../../features/phase';
 import type { PhaseStatus } from '../../features/phase';
 import { usePhasePermissions } from '../../hooks/usePhasePermissions';
-import { PhaseStatusModal } from './PhaseStatusModal';
+import { PhaseStatusModal } from '../layout/PhaseStatusModal';
 
 const NEXT_STATUS: Record<PhaseStatus, PhaseStatus | null> = {
   'Not Started': 'In Progress',
@@ -13,7 +14,13 @@ const NEXT_STATUS: Record<PhaseStatus, PhaseStatus | null> = {
   Complete: null,
 };
 
-export const PhaseRail: React.FC = () => {
+const STATUS_COLOR: Record<PhaseStatus, string> = {
+  'Not Started': 'gray',
+  'In Progress': 'blue',
+  Complete: 'green',
+};
+
+export const PhasePageHeader: React.FC = () => {
   const dispatch = useAppDispatch();
   const { id, name, status } = useAppSelector((s) => s.phase.currentPhase);
   const { canChangePhaseStatus } = usePhasePermissions();
@@ -64,59 +71,37 @@ export const PhaseRail: React.FC = () => {
 
   return (
     <>
-      <header
-        style={{
-          height: '72px',
-          background: 'var(--cl-bg-elev)',
-          borderBottom: '1px solid var(--cl-border)',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 32px',
-          justifyContent: 'space-between',
-          flexShrink: 0,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>Global Expansion Strategy</h1>
-          <span
-            style={{
-              padding: '4px 12px',
-              background: 'var(--cl-bg-sunken)',
-              borderRadius: 'var(--cl-radius-lg)',
-              fontSize: '14px',
-            }}
-          >
-            {name} — {status}
-          </span>
-        </div>
-        <div>
-          {targetStatus && canChangePhaseStatus && (
-            <button
-              style={{
-                background: 'var(--cl-primary)',
-                color: 'white',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: 'var(--cl-radius-lg)',
-                cursor: 'pointer',
-                fontWeight: 500,
-                fontSize: '14px',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = 'var(--cl-primary-hover)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = 'var(--cl-primary)';
-              }}
-              onClick={() => setModalOpen(true)}
-            >
-              {status === 'Not Started' ? 'Start Phase' : 'Complete Phase'}
-            </button>
-          )}
-        </div>
-      </header>
+      <Stack gap={4} mb="xl">
+        <Group justify="space-between" align="flex-start">
+          <div>
+            <Text size="xs" c="dimmed" ff="monospace" mb={4}>
+              {id}
+            </Text>
+            <Text size="xl" fw={700}>
+              {name}
+            </Text>
+          </div>
 
-      {targetStatus && canChangePhaseStatus && (
+          <Group gap="sm" align="center">
+            <Badge color={STATUS_COLOR[status]} variant="light" size="lg">
+              {status}
+            </Badge>
+
+            {canChangePhaseStatus && targetStatus ? (
+              <Button
+                color="violet"
+                size="sm"
+                onClick={() => setModalOpen(true)}
+                loading={isLoading}
+              >
+                {status === 'Not Started' ? 'Start Phase' : 'Complete Phase'}
+              </Button>
+            ) : null}
+          </Group>
+        </Group>
+      </Stack>
+
+      {canChangePhaseStatus && targetStatus && (
         <PhaseStatusModal
           opened={modalOpen}
           onClose={() => setModalOpen(false)}

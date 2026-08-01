@@ -9,6 +9,7 @@ interface PhaseStatusModalProps {
   phaseName: string;
   currentStatus: string;
   targetStatus: string;
+  isLoading?: boolean;
 }
 
 export const PhaseStatusModal: React.FC<PhaseStatusModalProps> = ({
@@ -19,6 +20,7 @@ export const PhaseStatusModal: React.FC<PhaseStatusModalProps> = ({
   phaseName,
   currentStatus,
   targetStatus,
+  isLoading = false,
 }) => {
   const [acknowledged, setAcknowledged] = useState(false);
 
@@ -96,7 +98,12 @@ export const PhaseStatusModal: React.FC<PhaseStatusModalProps> = ({
           <Button variant="default" onClick={handleClose}>
             Cancel
           </Button>
-          <Button color="violet" disabled={!acknowledged} onClick={handleConfirm}>
+          <Button
+            color="violet"
+            disabled={!acknowledged || isLoading}
+            loading={isLoading}
+            onClick={handleConfirm}
+          >
             Confirm Change
           </Button>
         </Group>

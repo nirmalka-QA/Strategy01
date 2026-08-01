@@ -1,10 +1,10 @@
 import { StrategyShell } from './components/layout';
-import { HomePage } from './pages/Home';
+import { DiscoveryPage } from './pages/DiscoveryPage';
 
 export default function App() {
   return (
     <StrategyShell>
-      <HomePage />
+      <DiscoveryPage />
     </StrategyShell>
   );
 }
