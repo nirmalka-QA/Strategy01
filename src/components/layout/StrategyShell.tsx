@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { AppShell } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { TopBar } from './TopBar';
 import { Sidebar } from './Sidebar';
-import { PhaseRail } from './PhaseRail';
+import { AssistantPanel } from './AssistantPanel';
 import './strategy-theme.css';
 
 interface StrategyShellProps {
@@ -8,29 +11,53 @@ interface StrategyShellProps {
 }
 
 export const StrategyShell: React.FC<StrategyShellProps> = ({ children }) => {
-  const [isAssistantOpen] = useState(true);
+  const [mobileNavOpened, { toggle: toggleMobileNav }] = useDisclosure(false);
 
   return (
-    <div className="strategy-shell">
-      <PhaseRail />
-      <div className="shell-main">
-        <aside className="sidebar-slot">
-          <Sidebar />
-        </aside>
-        <main className="work-area">{children}</main>
-        {isAssistantOpen && (
-          <aside className="assistant-slot">
-            <div style={{ padding: '24px' }}>
-              <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: 600 }}>
-                AI Assistant
-              </h3>
-              <p style={{ margin: 0, color: 'var(--cl-text-muted)' }}>
-                Context-aware chat goes here...
-              </p>
-            </div>
-          </aside>
-        )}
-      </div>
-    </div>
+    <AppShell
+      header={{ height: 64 }}
+      navbar={{
+        width: 260,
+        breakpoint: 'sm',
+        collapsed: { mobile: !mobileNavOpened },
+      }}
+      aside={{
+        width: 360,
+        breakpoint: 'lg',
+        collapsed: { mobile: true },
+      }}
+      padding={0}
+    >
+      <AppShell.Header
+        style={{
+          background: 'var(--cl-bg-elev)',
+          borderBottom: '1px solid var(--cl-border)',
+        }}
+      >
+        <TopBar mobileNavOpened={mobileNavOpened} onMobileNavToggle={toggleMobileNav} />
+      </AppShell.Header>
+
+      <AppShell.Navbar
+        style={{
+          background: 'var(--cl-bg-elev)',
+          borderRight: '1px solid var(--cl-border)',
+        }}
+      >
+        <Sidebar />
+      </AppShell.Navbar>
+
+      <AppShell.Main style={{ background: 'var(--cl-bg)' }}>
+        <div className="work-area">{children}</div>
+      </AppShell.Main>
+
+      <AppShell.Aside
+        style={{
+          background: 'var(--cl-bg-elev)',
+          borderLeft: '1px solid var(--cl-border)',
+        }}
+      >
+        <AssistantPanel />
+      </AppShell.Aside>
+    </AppShell>
   );
 };
