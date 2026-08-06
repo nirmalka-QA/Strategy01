@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BeStrategy.Api/BeStrategy.Api.csproj" />
+    <Project Path="src/BeStrategy.Application/BeStrategy.Application.csproj" />
+    <Project Path="src/BeStrategy.Domain/BeStrategy.Domain.csproj" />
+    <Project Path="src/BeStrategy.Infrastructure/BeStrategy.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BeStrategy.Api.Tests/BeStrategy.Api.Tests.csproj" />
+    <Project Path="tests/BeStrategy.Application.Tests/BeStrategy.Application.Tests.csproj" />
+  </Folder>
+</Solution>

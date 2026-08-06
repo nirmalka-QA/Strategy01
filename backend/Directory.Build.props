@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <AnalysisMode>All</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- Deterministic builds -->
+    <Deterministic>true</Deterministic>
+    <!-- Assembly metadata -->
+    <Company>BE-Strategy</Company>
+    <Product>BE-Strategy API</Product>
+    <Copyright>Copyright © BE-Strategy 2026</Copyright>
+  </PropertyGroup>
+</Project>

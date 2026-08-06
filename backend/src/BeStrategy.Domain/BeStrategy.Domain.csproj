@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>BeStrategy.Domain</RootNamespace>
+    <AssemblyName>BeStrategy.Domain</AssemblyName>
+  </PropertyGroup>
+
+</Project>

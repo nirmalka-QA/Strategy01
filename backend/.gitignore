@@ -1,0 +1,41 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.userprefs
+
+## Logs
+logs/
+*.log
+
+## Secrets (never commit real keys)
+appsettings.Production.json
+*secrets*.json
+
+## Rider / ReSharper
+.idea/
+*.sln.iml
+_ReSharper.Caches/
+
+## Rider Temp
+*.DotSettings.user
+
+## Build / publish artifacts
+publish/
+artifacts/
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+!.config/dotnet-tools.json
+
+## Test results
+TestResults/
+coverage/
+
+## OS
+.DS_Store
+Thumbs.db
